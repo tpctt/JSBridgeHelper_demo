@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DEV</key>
+	<string></string>
+	<key>SIT</key>
+	<string>https://static-sit.gomemyf.com/traffic-access/#/</string>
+	<key>PRO</key>
+	<string>http://10.129.39.118:8081/#/index</string>
+	<key>SIT2</key>
+	<string>http://10.129.39.147:8081/#/login</string>
+</dict>
+</plist>
