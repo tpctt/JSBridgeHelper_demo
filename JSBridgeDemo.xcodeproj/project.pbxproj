@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		225C07F51F16042E002F14FC /* WKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 225C07F41F16042E002F14FC /* WKViewController.m */; };
 		AA4715FE1EC466CE006BE0A0 /* UIImage+Rotate.m in Sources */ = {isa = PBXBuildFile; fileRef = AA4715FD1EC466CE006BE0A0 /* UIImage+Rotate.m */; };
 		AA5F9AD01EB882D800E50422 /* timg.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = AA5F9ACF1EB882D800E50422 /* timg.jpeg */; };
 		AA5F9AD21EB8867D00E50422 /* WechatIMG5.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = AA5F9AD11EB8867D00E50422 /* WechatIMG5.jpeg */; };
@@ -38,6 +39,8 @@
 
 /* Begin PBXFileReference section */
 		07E0E8CBBC18DCC93A69D83F /* libPods-JSBridgeDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JSBridgeDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		225C07F31F16042E002F14FC /* WKViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKViewController.h; sourceTree = "<group>"; };
+		225C07F41F16042E002F14FC /* WKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKViewController.m; sourceTree = "<group>"; };
 		472B4535299571382F67F771 /* Pods-JSBridgeDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSBridgeDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JSBridgeDemo/Pods-JSBridgeDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		AA0047E21ED2CF230034DA62 /* MYFDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MYFDefines.h; sourceTree = "<group>"; };
 		AA4715FC1EC466CE006BE0A0 /* UIImage+Rotate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Rotate.h"; sourceTree = "<group>"; };
@@ -155,6 +158,8 @@
 				AAAB4C9D1EB1CCCE00A6F9C4 /* AppDelegate.m */,
 				AA9A06F71EC31DE700C3B5EF /* FirstViewController.h */,
 				AA9A06F81EC31DE700C3B5EF /* FirstViewController.m */,
+				225C07F31F16042E002F14FC /* WKViewController.h */,
+				225C07F41F16042E002F14FC /* WKViewController.m */,
 				AAAB4C9F1EB1CCCE00A6F9C4 /* ViewController.h */,
 				AAAB4CA01EB1CCCE00A6F9C4 /* ViewController.m */,
 				AAAB4CD11EB2449A00A6F9C4 /* GMSystemAuthorizationTool.h */,
@@ -345,6 +350,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				225C07F51F16042E002F14FC /* WKViewController.m in Sources */,
 				AAAB4CA11EB1CCCE00A6F9C4 /* ViewController.m in Sources */,
 				AAAB4CCD1EB1DBAB00A6F9C4 /* WebViewJavascriptBridge.m in Sources */,
 				AAAB4C9E1EB1CCCE00A6F9C4 /* AppDelegate.m in Sources */,

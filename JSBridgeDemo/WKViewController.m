@@ -6,9 +6,8 @@
 //  Copyright © 2017年 gomeguomingyue. All rights reserved.
 //  
 
-#import "ViewController.h"
+#import "WKViewController.h"
 #import "WKWebViewJavascriptBridge.h"
-#import "WebViewJavascriptBridge.h"
 
 
 #import "GMSystemAuthorizationTool.h"
@@ -19,10 +18,10 @@
 #import "defines.h"
 #import "UIImage+Rotate.h"
 
-@interface ViewController ()< UIWebViewDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface WKViewController ()<WKUIDelegate,UIWebViewDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
-@property WebViewJavascriptBridge * bridge;
-@property (nonatomic, strong) UIWebView* webView;
+@property WKWebViewJavascriptBridge * bridge;
+@property (nonatomic, strong) WKWebView* webView;
 
 @property (nonatomic, copy) WVJBResponseCallback responseCallback;//照片
 @property (nonatomic, copy) WVJBResponseCallback locationResponseCallback;//定位
@@ -30,7 +29,7 @@
 
 @end
 
-@implementation ViewController
+@implementation WKViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -69,18 +68,18 @@
     configuration.preferences = preferences;
      */
     
-    self.webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 20, DEVICE_WIDTH, DEVICE_HEIGHT-20)];
+    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 20, DEVICE_WIDTH, DEVICE_HEIGHT-20)];
     //self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds];
     //self.webView.navigationDelegate = self;
-    self.webView.delegate = self;
+    self.webView.UIDelegate = self;
     
     self.webView.scrollView.showsVerticalScrollIndicator = NO;
     self.webView.scrollView.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:self.webView];
 //    [self.webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
     
-    [WebViewJavascriptBridge enableLogging];
-    _bridge = [WebViewJavascriptBridge bridgeForWebView:self.webView];
+    [WKWebViewJavascriptBridge enableLogging];
+    _bridge = [WKWebViewJavascriptBridge bridgeForWebView:self.webView];
     [_bridge setWebViewDelegate:self];
     
     //注册方法
@@ -101,7 +100,7 @@
     [self loadExamplePage:self.webView];
 }
 
-- (void)loadExamplePage:(UIWebView*)webView {
+- (void)loadExamplePage:(WKWebView*)webView {
     
     NSLog(@"baseUrl = %@", baseUrl);
     NSString* htmlPath = baseUrl;
@@ -260,29 +259,35 @@
 }
 
 #pragma mark - WKNavigationDelegate
-//
-//- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-//{
-//    return YES;
-//}
-//- (void)webViewDidStartLoad:(UIWebView *)webView
-//{
-//    NSLog(@"webViewDidStartLoad");
-//    self.progressView.hidden = NO;
-//    self.progressView.transform = CGAffineTransformMakeScale(1.0f, 1.5f);
-//    [self.view bringSubviewToFront:self.progressView];
-//}
-//- (void)webViewDidFinishLoad:(UIWebView *)webView
-//{
-//    NSLog(@"webViewDidFinishLoad");
-//
-//}
-//- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
-//{
-//    NSLog(@"webViewDidFail");
-//    self.progressView.hidden = YES;
-//    
-//}
+- (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation
+{
+    //self.title = webView.title;
+    NSLog(@"webViewDidStartLoad");
+    self.progressView.hidden = NO;
+    self.progressView.transform = CGAffineTransformMakeScale(1.0f, 1.5f);
+    [self.view bringSubviewToFront:self.progressView];
+}
+
+-(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
+{
+    NSLog(@"webViewDidFinishLoad");
+}
+
+-(void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error
+{
+    NSLog(@"webViewDidFail");
+    self.progressView.hidden = YES;
+}
+
+-(void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler
+{
+    NSLog(@"runJavaScriptAlertPanelWithMessage");
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil];
+    [alert addAction:action];
+    [self presentViewController:alert animated:YES completion:nil];
+    completionHandler();
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -290,22 +295,22 @@
 }
 
 #pragma mark - KVO
-//-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
-//{
-//    if ([keyPath isEqualToString:@"estimatedProgress"]) {
-//        self.progressView.progress = self.webView.estimatedProgress;
-//        if (self.progressView.progress == 1) {
-//            __weak typeof(self) weakSelf = self;
-//            [UIView animateWithDuration:0.25 delay:0.3 options:UIViewAnimationOptionCurveEaseOut animations:^{
-//                weakSelf.progressView.transform = CGAffineTransformMakeScale(1.0f, 1.4f);
-//            } completion:^(BOOL finished) {
-//                weakSelf.progressView.hidden = YES;
-//            }];
-//        }
-//    } else {
-//        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-//    }
-//}
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"estimatedProgress"]) {
+        self.progressView.progress = self.webView.estimatedProgress;
+        if (self.progressView.progress == 1) {
+            __weak typeof(self) weakSelf = self;
+            [UIView animateWithDuration:0.25 delay:0.3 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                weakSelf.progressView.transform = CGAffineTransformMakeScale(1.0f, 1.4f);
+            } completion:^(BOOL finished) {
+                weakSelf.progressView.hidden = YES;
+            }];
+        }
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
 
 #pragma mark - delete web cache
 -(void)deleteWebCache
@@ -328,7 +333,7 @@
 
 -(void)dealloc
 {
-//    [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
+    [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
 }
 
 

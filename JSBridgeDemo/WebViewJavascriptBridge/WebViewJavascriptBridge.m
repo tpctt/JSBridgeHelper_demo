@@ -159,23 +159,90 @@
     if (webView != _webView) { return YES; }
     NSURL *url = [request URL];
     __strong WVJB_WEBVIEW_DELEGATE_TYPE* strongDelegate = _webViewDelegate;
+    
     if ([_base isCorrectProcotocolScheme:url]) {
-        if ([_base isBridgeLoadedURL:url]) {
-            [_base injectJavascriptFile];
-        } else if ([_base isQueueMessageURL:url]) {
-            NSString *messageQueueString = [self _evaluateJavascript:[_base webViewJavascriptFetchQueyCommand]];
-            [_base flushMessageQueue:messageQueueString];
+        if (strongDelegate && [strongDelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {
+            return [_webViewDelegate webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
         } else {
-            [_base logUnkownMessage:url];
+//            decisionHandler(WKNavigationActionPolicyAllow);
+            return YES;
+
+        }
+    }
+    
+//    if ([_base isCorrectProcotocolHttpScheme:url]) {
+//        if (strongDelegate  && [strongDelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {
+//            return [_webViewDelegate webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
+//        } else {
+//            //            decisionHandler(WKNavigationActionPolicyAllow);
+//            return YES;
+//            
+//        }
+//    }
+    
+    if ([_base isCorrectProcotocolGomeScheme:url]) {
+        if ([_base isBridgeLoadedGomeURL:url]) {
+            [_base injectJavascriptFile];
         }
         return NO;
-    } else if (strongDelegate && [strongDelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {
-        return [strongDelegate webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
-    } else {
-        return YES;
     }
+    
+    if ([_base isCorrectProcotocolHttpScheme:url]) {
+        if ([_base isQueueMessageURL:url]) {
+            [self WKFlushMessageQueue];
+            return NO;
+            
+        }
+
+    }
+    
+    if (strongDelegate && [strongDelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {
+        return [_webViewDelegate webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
+    } else {
+        //            decisionHandler(WKNavigationActionPolicyAllow);
+        return YES;
+        
+    }
+    
+    return YES;
+    
+//    if ([_base isCorrectProcotocolScheme:url]) {
+//        if ([_base isBridgeLoadedURL:url]) {
+//            [_base injectJavascriptFile];
+//        } else if ([_base isQueueMessageURL:url]) {
+//            NSString *messageQueueString = [self _evaluateJavascript:[_base webViewJavascriptFetchQueyCommand]];
+//            [_base flushMessageQueue:messageQueueString];
+//        } else {
+//            [_base logUnkownMessage:url];
+//        }
+//        return NO;
+//    } else if (strongDelegate && [strongDelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {
+//        return [strongDelegate webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
+//    } else {
+//        return YES;
+//    }
 }
 
+- (void)WKFlushMessageQueue {
+    NSString *string =  [_webView stringByEvaluatingJavaScriptFromString:[_base webViewJavascriptFetchQueyCommand]];
+    [_base flushMessageQueue:string];
+    
+
+    return;
+    
+    [self callHandler:[_base webViewJavascriptFetchQueyCommand] data:nil responseCallback:^(id responseData) {
+
+//        [_base flushMessageQueue:responseData];
+
+    }];
+    
+//    [_webView evaluateJavaScript:[_base webViewJavascriptFetchQueyCommand] completionHandler:^(NSString* result, NSError* error) {
+//        if (error != nil) {
+//            NSLog(@"WebViewJavascriptBridge: WARNING: Error when trying to fetch data from WKWebView: %@", error);
+//        }
+//        [_base flushMessageQueue:result];
+//    }];
+}
 - (void)webViewDidStartLoad:(UIWebView *)webView {
     if (webView != _webView) { return; }
     
