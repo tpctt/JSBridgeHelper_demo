@@ -7,13 +7,10 @@
 
 #import <Foundation/Foundation.h>
 
-#define kCustomProtocolScheme @"https"
-#define kCustomProtocolHttpScheme @"http"
-#define kCustomProtocolGomeScheme @"gomescheme"
-#define kQueueHasMessage      @"__wvjb_queue_message__"
-#define kBridgeLoaded         @"__bridge_loaded__"
-#define kBridgeGomeLoaded     @"__BRIDGE_LOADED__"
-#define kHost                 @"static-sit.gomemyf.com"
+#define kOldProtocolScheme @"wvjbscheme"
+#define kNewProtocolScheme @"https"
+#define kQueueHasMessage   @"__wvjb_queue_message__"
+#define kBridgeLoaded      @"__bridge_loaded__"
 
 typedef void (^WVJBResponseCallback)(id responseData);
 typedef void (^WVJBHandler)(id data, WVJBResponseCallback responseCallback);
@@ -38,19 +35,12 @@ typedef NSDictionary WVJBMessage;
 - (void)sendData:(id)data responseCallback:(WVJBResponseCallback)responseCallback handlerName:(NSString*)handlerName;
 - (void)flushMessageQueue:(NSString *)messageQueueString;
 - (void)injectJavascriptFile;
-- (BOOL)isCorrectProcotocolScheme:(NSURL*)url;
-- (BOOL)isCorrectProcotocolHttpScheme:(NSURL*)url;
+- (BOOL)isWebViewJavascriptBridgeURL:(NSURL*)url;
 - (BOOL)isQueueMessageURL:(NSURL*)urll;
 - (BOOL)isBridgeLoadedURL:(NSURL*)urll;
 - (void)logUnkownMessage:(NSURL*)url;
 - (NSString *)webViewJavascriptCheckCommand;
 - (NSString *)webViewJavascriptFetchQueyCommand;
 - (void)disableJavscriptAlertBoxSafetyTimeout;
-
-//自定义
-- (BOOL)isBridgeLoadedHostURL:(NSURL*)url;
-- (BOOL)isCorrectProcotocolGomeScheme:(NSURL*)url;
-- (BOOL)isBridgeLoadedGomeURL:(NSURL*)url;
-
 
 @end

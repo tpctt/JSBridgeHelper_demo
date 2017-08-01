@@ -12,6 +12,8 @@
 #import "TestViewController.h"
 #import "FirstViewController.h"
 
+#import <AddressBook/AddressBook.h>
+
 @interface AppDelegate ()
 
 @end
@@ -24,11 +26,19 @@
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:[[FirstViewController alloc] init]];
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.rootViewController = navi;
+    
     [[LocationTools sharedInstance] getCurrentLocation:^(CLLocation *location, CLPlacemark *pl, NSString *error, BOOL loading) {
         
     }];
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+- (void)requestAuthorizationAddressBook {
+    // 判断是否授权
+    ABAuthorizationStatus authorizationStatus = ABAddressBookGetAuthorizationStatus();
+    if (authorizationStatus == kABAuthorizationStatusNotDetermined) {
+    }
 }
 
 

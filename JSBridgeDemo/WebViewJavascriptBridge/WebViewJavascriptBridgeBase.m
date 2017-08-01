@@ -20,13 +20,14 @@ static int logMaxLength = 500;
 + (void)enableLogging { logging = true; }
 + (void)setLogMaxLength:(int)length { logMaxLength = length;}
 
--(id)init {
-    self = [super init];
-    self.messageHandlers = [NSMutableDictionary dictionary];
-    self.startupMessageQueue = [NSMutableArray array];
-    self.responseCallbacks = [NSMutableDictionary dictionary];
-    _uniqueId = 0;
-    return(self);
+- (id)init {
+    if (self = [super init]) {
+        self.messageHandlers = [NSMutableDictionary dictionary];
+        self.startupMessageQueue = [NSMutableArray array];
+        self.responseCallbacks = [NSMutableDictionary dictionary];
+        _uniqueId = 0;
+    }
+    return self;
 }
 
 - (void)dealloc {
@@ -110,7 +111,7 @@ static int logMaxLength = 500;
 }
 
 - (void)injectJavascriptFile {
-    NSString *js = GomeBridge_js();
+    NSString *js = WebViewJavascriptBridge_js();
     [self _evaluateJavascript:js];
     if (self.startupMessageQueue) {
         NSArray* queue = self.startupMessageQueue;
@@ -121,45 +122,38 @@ static int logMaxLength = 500;
     }
 }
 
--(BOOL)isCorrectProcotocolScheme:(NSURL*)url {
-    if([[url scheme] isEqualToString:kCustomProtocolScheme]){
-        return YES;
-    } else {
+- (BOOL)isWebViewJavascriptBridgeURL:(NSURL*)url {
+    if (![self isSchemeMatch:url]) {
         return NO;
     }
+    return [self isBridgeLoadedURL:url] || [self isQueueMessageURL:url];
 }
 
-- (BOOL)isCorrectProcotocolHttpScheme:(NSURL*)url
-{
-    if([[url scheme] isEqualToString:kCustomProtocolHttpScheme]){
-        return YES;
-    } else {
-        return NO;
-    }
+- (BOOL)isSchemeMatch:(NSURL*)url {
+    NSString* scheme = url.scheme.lowercaseString;
+    return [scheme isEqualToString:kNewProtocolScheme] || [scheme isEqualToString:kOldProtocolScheme];
 }
 
--(BOOL)isQueueMessageURL:(NSURL*)url {
-    if([[url host] isEqualToString:kQueueHasMessage]){
-        return YES;
-    } else {
-        return NO;
-    }
+- (BOOL)isQueueMessageURL:(NSURL*)url {
+    NSString* host = url.host.lowercaseString;
+    return [self isSchemeMatch:url] && [host isEqualToString:kQueueHasMessage];
 }
 
--(BOOL)isBridgeLoadedURL:(NSURL*)url {
-    return ([[url scheme] isEqualToString:kCustomProtocolScheme] && [[url host] isEqualToString:kBridgeLoaded]);
+- (BOOL)isBridgeLoadedURL:(NSURL*)url {
+    NSString* host = url.host.lowercaseString;
+    return [self isSchemeMatch:url] && [host isEqualToString:kBridgeLoaded];
 }
 
--(void)logUnkownMessage:(NSURL*)url {
+- (void)logUnkownMessage:(NSURL*)url {
     NSLog(@"WebViewJavascriptBridge: WARNING: Received unknown WebViewJavascriptBridge command %@", [url absoluteString]);
 }
 
--(NSString *)webViewJavascriptCheckCommand {
-    return @"typeof GomeBridge == \'object\';";
+- (NSString *)webViewJavascriptCheckCommand {
+    return @"typeof WebViewJavascriptBridge == \'object\';";
 }
 
--(NSString *)webViewJavascriptFetchQueyCommand {
-    return @"GomeBridge._fetchQueue();";
+- (NSString *)webViewJavascriptFetchQueyCommand {
+    return @"WebViewJavascriptBridge._fetchQueue();";
 }
 
 - (void)disableJavscriptAlertBoxSafetyTimeout {
@@ -193,7 +187,7 @@ static int logMaxLength = 500;
     messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\u2028" withString:@"\\u2028"];
     messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@"\u2029" withString:@"\\u2029"];
     
-    NSString* javascriptCommand = [NSString stringWithFormat:@"GomeBridge._handleMessageFromObjC('%@');", messageJSON];
+    NSString* javascriptCommand = [NSString stringWithFormat:@"WebViewJavascriptBridge._handleMessageFromObjC('%@');", messageJSON];
     if ([[NSThread currentThread] isMainThread]) {
         [self _evaluateJavascript:javascriptCommand];
 
@@ -221,35 +215,6 @@ static int logMaxLength = 500;
         NSLog(@"WVJB %@: %@ [...]", action, [json substringToIndex:logMaxLength]);
     } else {
         NSLog(@"WVJB %@: %@", action, json);
-    }
-}
-
-#pragma mark - 自定义
-- (BOOL)isBridgeLoadedHostURL:(NSURL*)url
-{
-    return ([[url scheme] isEqualToString:kCustomProtocolScheme] && [[url host] isEqualToString:kHost]);
-}
-
-- (BOOL)isCorrectProcotocolGomeScheme:(NSURL*)url
-{
-    if([[url scheme] isEqualToString:kCustomProtocolGomeScheme]){
-        return YES;
-    } else {
-        return NO;
-    }
-}
-
-- (BOOL)isBridgeLoadedGomeURL:(NSURL*)url
-{
-    return ([[url scheme] isEqualToString:kCustomProtocolGomeScheme] && [[url host] isEqualToString:kBridgeGomeLoaded]);
-}
-
--(BOOL)isQueueMessageGomeURL:(NSURL*)url
-{
-    if([[url host] isEqualToString:kQueueHasMessage]){
-        return YES;
-    } else {
-        return NO;
     }
 }
 

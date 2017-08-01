@@ -34,6 +34,8 @@
 			<false/>
 		</dict>
 	</dict>
+	<key>NSContactsUsageDescription</key>
+	<string>JSBridgeDemo sss</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>JSBridgeDemo</string>
 	<key>NSCameraUsageDescription</key>

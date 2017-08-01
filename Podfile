@@ -6,8 +6,9 @@ source 'https://github.com/CocoaPods/Specs.git'        #官方仓库地址
 # 公有库
 def public_pods
     
-    pod 'Masonry', '~> 1.0.0'
-    
+    pod 'Masonry', '~> 1.0.0'    
+    pod 'SDCycleScrollView','~>1.65'
+
 end
 
 target 'JSBridgeDemo' do

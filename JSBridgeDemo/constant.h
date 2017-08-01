@@ -20,5 +20,6 @@ extern NSString* const strBaseUrlInDevelopEvn;
 extern NSString* const strBaseUrlInSitEvn;
 //sit2
 extern NSString* const strBaseUrlInSit2Evn;
+extern NSString* const strBaseUrlInSit3Evn;
 
 #endif /* constant_h */

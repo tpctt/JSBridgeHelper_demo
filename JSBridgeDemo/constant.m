@@ -12,9 +12,9 @@
 NSString * baseUrl = @"";
 
 NSString* const strBaseUrlInDevelopEvn = @"";      // 开发环境
-
 //NSString* const strBaseUrlInSitEvn     = @"https://static-sit.gomemyf.com/traffic-access/#/";//sit
-NSString* const strBaseUrlInSitEvn     = @"http://static-sit.gomemyf.com/flow-h5/#/testTool?fromChannel=taoqb";//sit
 
+NSString* const strBaseUrlInSitEvn     = @"http://static-sit.gomemyf.com/flow-h5/#/testTool?fromChannel=taoqb";//sit
 //sit2
-NSString* const strBaseUrlInSit2Evn     = @"http://10.129.39.147:8081/#/login";
+NSString* const strBaseUrlInSit2Evn     = @"http://test.taoqian123.com.cn/";
+NSString* const strBaseUrlInSit3Evn     = @"http://192.168.1.197:3000/";

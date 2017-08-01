@@ -25,7 +25,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    [self buttonAction];
+//    [self buttonAction];
     
     UIButton *button = ({
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -55,6 +55,7 @@
         
         self.show = NO;
         
+
         [self presentViewController:testVC animated:YES completion:nil];
         
         [testVC chooseComputingBlock:^(NSString *computing, NSString *valueString) {
@@ -70,8 +71,10 @@
                     
                 }else if ([computing isEqualToString:@"PRO"] ) {
                     baseUrl = strBaseUrlInSitEvn;
-                }else if ([computing isEqualToString:@"SIT2"]) {
+                }else if ([computing isEqualToString:@"API Demo"]) {
                     baseUrl = strBaseUrlInSit2Evn;
+                }else if ([computing isEqualToString:@"LOCALDEMO"]) {
+                    baseUrl = strBaseUrlInSit3Evn;
                 }
                 
                 

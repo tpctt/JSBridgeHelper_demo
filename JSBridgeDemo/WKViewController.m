@@ -25,6 +25,8 @@
 
 @property (nonatomic, copy) WVJBResponseCallback responseCallback;//照片
 @property (nonatomic, copy) WVJBResponseCallback locationResponseCallback;//定位
+@property (nonatomic, strong) WVJBResponseCallback phoneCallBack;//拨打电话
+
 @property (nonatomic, strong) UIProgressView *progressView;
 
 @end
@@ -85,19 +87,26 @@
     //注册方法
     __weak typeof(self) weakSelf = self;
     
-    [_bridge registerHandler:@"gome_getphoto" handler:^(id data, WVJBResponseCallback responseCallback) {
+//    [_bridge registerHandler:@"chooseImage" handler:^(id data, WVJBResponseCallback responseCallback) {
+//        NSLog(@"call back gome_getphoto:%@",data);
+//        weakSelf.responseCallback = responseCallback;
+//        [weakSelf photographAction];
+//    }];
+    
+    [_bridge registerHandler:@"chooseImage" handler:^(id data, WVJBResponseCallback responseCallback) {
         NSLog(@"call back gome_getphoto:%@",data);
-        weakSelf.responseCallback = responseCallback;
-        [weakSelf photographAction];
+        weakSelf.responseCallback = _phoneCallBack;
+        [weakSelf makePhoneCall];
     }];
-    [_bridge registerHandler:@"gome_getgps" handler:^(id data, WVJBResponseCallback responseCallback) {
-        NSLog(@"call back gome_getgps:%@",data);
-        weakSelf.locationResponseCallback = responseCallback;
-        [weakSelf locationAction];
-    }];
+//    [_bridge registerHandler:@"chooseImage" handler:^(id data, WVJBResponseCallback responseCallback) {
+//        NSLog(@"call back gome_getgps:%@",data);
+//        weakSelf.locationResponseCallback = responseCallback;
+//        [weakSelf locationAction];
+//    }];
     
     //加载页面
     [self loadExamplePage:self.webView];
+    
 }
 
 - (void)loadExamplePage:(WKWebView*)webView {
@@ -173,6 +182,19 @@
         }
     }];
      */
+}
+
+
+
+/* 拨打电话  */
+-(void)makePhoneCall
+{
+
+    NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",@"18600006979"];
+    UIWebView  *  callWebview = [[UIWebView alloc] init];
+    [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
+    [self.view addSubview:callWebview];
+    
 }
 
 -(void)locationAction
@@ -322,6 +344,7 @@
         [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:websiteDataTypes modifiedSince:dateFrom completionHandler:^{
             
         }];
+        
     } else {
         NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         NSString *cookiesFolderPath = [libraryPath stringByAppendingString:@"/Cookies"];

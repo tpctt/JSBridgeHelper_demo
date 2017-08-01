@@ -15,6 +15,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <AddressBook/AddressBook.h>
 #import <Photos/Photos.h>
+#import "SXAddressBookManager.h"
 
 
 @implementation GMSystemAuthorizationTool
@@ -22,6 +23,7 @@
 //通讯录授权
 + (void)checkAddressBookAuthorization:(void (^)(bool, ABAuthorizationStatus))block
 {
+
     ABAddressBookRef  addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
     ABAuthorizationStatus authorizationStatus = ABAddressBookGetAuthorizationStatus();
     if (authorizationStatus != kABAuthorizationStatusNotDetermined)

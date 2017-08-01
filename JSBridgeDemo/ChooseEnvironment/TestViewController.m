@@ -45,7 +45,7 @@
     
     UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 70, KScreenWidth, 20)];
     timeLabel.textAlignment = NSTextAlignmentCenter;
-    timeLabel.text = @"2016-11-28 11:46";
+    timeLabel.text = @"2017-7-18 11:46";
     timeLabel.textColor = [UIColor redColor];
     [self.view addSubview:timeLabel];
     
