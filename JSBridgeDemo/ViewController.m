@@ -44,19 +44,17 @@
 
 @property (nonatomic, strong) UIWebView* webView;
 
-@property (nonatomic, copy) WVJBResponseCallback responseCallback;//照片
+@property (nonatomic, copy) WVJBResponseCallback responseCallback;//通用,无需权限验证的
+@property (nonatomic, copy) WVJBResponseCallback imageResponseCallback;//照片
 @property (nonatomic, copy) WVJBResponseCallback locationResponseCallback;//定位
 @property (nonatomic, strong) WVJBResponseCallback phoneCallBack;//拨打电话
-@property (nonatomic, strong) WVJBResponseCallback pasteboardCallBack; //获取粘贴版
 @property (nonatomic, strong) WVJBResponseCallback addressBookCallBack; //获取通讯录
 @property (nonatomic, strong) WVJBResponseCallback shareCallBack; //分享回调
 @property (nonatomic, strong) WVJBResponseCallback previewImageCallBack; // 预览回调
-@property (nonatomic, strong) WVJBResponseCallback setNavigationBarTitleCallBack; //设置导航栏标题
-@property (nonatomic, strong) WVJBResponseCallback setNavigationBarColorCallBack; //设置导航栏颜色
-@property (nonatomic, strong) WVJBResponseCallback showNavigationBarCallBack; //显示导航栏
-@property (nonatomic, strong) WVJBResponseCallback hideNavigationBarCallBack; //隐藏导航栏
+
 
 @property(nonatomic,strong)NSArray<SXPersonInfoEntity *>*personEntityArray;
+
 
 @property (nonatomic, strong) UIProgressView *progressView;
 
@@ -127,7 +125,7 @@
     
     [_bridge registerHandler:@"chooseImage" handler:^(id data, WVJBResponseCallback responseCallback) {
         NSLog(@"call back gome_getphoto:%@",data);
-        weakSelf.responseCallback = responseCallback;
+        weakSelf.imageResponseCallback = responseCallback;
         
         ///album 从相册选图，camera 使用相机，无数据/其他的时候 二者都允许
         NSString *source = [data objectForKey:@"sourceType"];
@@ -155,10 +153,10 @@
     
     [_bridge registerHandler:@"previewImage" handler:^(id data, WVJBResponseCallback responseCallback) {
         
-        NSDictionary * info = (NSDictionary * )data;
+        weakSelf.previewImageCallBack  = responseCallback;
         
+        NSDictionary * info = (NSDictionary * )data;
         NSArray * array  = [info objectForKey:@"urls"];
-        weakSelf.shareCallBack  = self.previewImageCallBack;
         TQBPreviewController  *vc = [[TQBPreviewController alloc] init];
         vc.imageArray = array;
         
@@ -168,19 +166,15 @@
     
     [_bridge registerHandler:@"makePhoneCall" handler:^(id data, WVJBResponseCallback responseCallback) {
         NSLog(@"call back gome_getphoto:%@",data);
+        weakSelf.phoneCallBack = responseCallback;
         
         //直接从data中解析
-        
+
         NSDictionary * dict = (NSDictionary *)data;
         NSString * phone = [dict objectForKey:@"phoneNumber"];
-
-        NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",phone];
-        UIWebView  *  callWebview = [[UIWebView alloc] init];
-        [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
-        [self.view addSubview:callWebview];
-        weakSelf.responseCallback = _phoneCallBack;
-
-//        [weakSelf makePhoneCall];
+        
+        [self makePhoneCall:phone];
+        
     }];
     
     //设置系统粘贴版内容
@@ -203,7 +197,6 @@
     }];
     
     //获取经纬度
-    
     [_bridge registerHandler:@"getLocation" handler:^(id data, WVJBResponseCallback responseCallback) {
         NSLog(@"call back gome_getgps:%@",data);
         weakSelf.locationResponseCallback = responseCallback;
@@ -219,12 +212,9 @@
         
     }];
     
-//    [self getAllAddressBookInformation];
     
     // 获取通讯录功能 (获取一个通讯录)
-    
     [_bridge registerHandler:@"getContact" handler:^(id data, WVJBResponseCallback responseCallback) {
-        
         weakSelf.addressBookCallBack = responseCallback;
         [weakSelf getAddressBookInformation];
         
@@ -235,6 +225,7 @@
     [_bridge registerHandler:@"login" handler:^(id data, WVJBResponseCallback responseCallback) {
         
         weakSelf.responseCallback  = responseCallback;
+        
         LoginOutViewController *vc = [LoginOutViewController new];
         vc.delegate = self;
         [self presentViewController:vc animated:1 completion:^{
@@ -254,6 +245,7 @@
         }];
         
     }];
+    
     //获取设备选型
     [_bridge registerHandler:@"getDeviceInfo" handler:^(id data, WVJBResponseCallback responseCallback) {
         
@@ -279,12 +271,13 @@
   
     
 
-    //获取ios
-    
+    //设置导航栏相关的代码
     [self setNavigationBar];
     
     //加载页面
     [self loadExamplePage:self.webView];
+    
+    
 }
 -(void)getUserInfo
 {
@@ -323,7 +316,23 @@
     
     
 }
+-(void)makePhoneCall:(NSString *)phone
+{
+    
+    NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",phone];
+    if ([[UIApplication sharedApplication]canOpenURL:[NSURL URLWithString:str]]) {
+        UIWebView  *  callWebview = [[UIWebView alloc] init];
+        [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
+        [self.view addSubview:callWebview];
+        self.responseCallback([self DataTOjsonString:@"设备支持拨打电话"]);
 
+    }else{
+        NSDictionary * dict = @{@"code":@"-1",@"msg":@"设备不支持拨打电话"};
+        self.responseCallback([self DictTOjsonString:dict]);
+        
+    }
+    
+}
 //
 ///获取系统信息
 -(NSMutableDictionary*)getSystemInfo:(BOOL)flag block:(void (^)(NSMutableDictionary*))block
@@ -413,16 +422,18 @@
     __weak typeof(self) weakSelf = self;
 
     [_bridge registerHandler:@"setNavigationBarTitle" handler:^(id data, WVJBResponseCallback responseCallback) {
-        
+
+        weakSelf.responseCallback  = responseCallback;
+
         NSDictionary * info = (NSDictionary * )data;
-        
         weakSelf.title = [info objectForKey:@"title"];
-
-        weakSelf.shareCallBack  = self.setNavigationBarTitleCallBack;
-
+        
+        
     }];
 
     [_bridge registerHandler:@"setNavigationBarColor" handler:^(id data, WVJBResponseCallback responseCallback) {
+        weakSelf.responseCallback  = responseCallback;
+
         NSDictionary * info = (NSDictionary * )data;
         NSString * frontColor = [info objectForKey:@"frontColor"];
         NSString * backgroundColor = [info objectForKey:@"backgroundColor"];
@@ -430,23 +441,21 @@
         
         weakSelf.navigationController.navigationBar.barTintColor = [self colorWithHexString:backgroundColor alpha:1];
 
-
-        weakSelf.shareCallBack  = self.setNavigationBarColorCallBack;
         
     }];
     
     [_bridge registerHandler:@"showNavigationBar" handler:^(id data, WVJBResponseCallback responseCallback) {
-        
+        weakSelf.responseCallback  = responseCallback;
+
         weakSelf.navigationController.navigationBarHidden = NO;
-        weakSelf.shareCallBack  = self.showNavigationBarCallBack;
         
     }];
     
 
     [_bridge registerHandler:@"hideNavigationBar" handler:^(id data, WVJBResponseCallback responseCallback) {
-        
+        weakSelf.responseCallback  = responseCallback;
+
         weakSelf.navigationController.navigationBarHidden = YES;
-        weakSelf.shareCallBack  = self.hideNavigationBarCallBack;
         
     }];
     
@@ -652,39 +661,6 @@
         NSLog(@"没有权限");
     }
 
-    
-//    [GMSystemAuthorizationTool checkAddressBookAuthorization:^(bool isAuthorized, ABAuthorizationStatus authorStatus) {
-//        
-//        if (isAuthorized) {
-//            
-//            
-//        } else {
-//        
-//            // 请求授权
-//            ABAddressBookRef addressBookRef = ABAddressBookCreate();
-//            ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error) {
-//                if (granted) { // 授权成功
-//                    
-//                } else {  // 授权失败
-//                    UIAlertController *alertViewController = [UIAlertController alertControllerWithTitle:@"淘钱宝未获取通讯录权限" message:@"请在系统设置中允许“淘钱宝”访问相机\n 设置-> 隐私-> 相机 -> 淘钱宝" preferredStyle:UIAlertControllerStyleAlert];
-//                    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-//                    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//                        NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-//                        if ([[UIApplication sharedApplication] canOpenURL:url]) {
-//                            [[UIApplication sharedApplication] openURL:url];
-//                        }
-//                    }];
-//                    [alertViewController addAction:cancelAction];
-//                    [alertViewController addAction:confirmAction];
-//                    [self presentViewController:alertViewController animated:YES completion:nil];
-//                    
-//                }
-//            });
-//            
-//        }
-//        
-//    }];
-//
 }
 
 -(void)getAddressBookInformation{
@@ -775,7 +751,6 @@
     
 }
 
-
 -(void)cameraAction
 {
     //打开相机
@@ -816,7 +791,6 @@
     
    
 }
-
 -(void)locationAction
 {
     NSLog(@"locationAction");
@@ -904,7 +878,7 @@
     NSString *base64String = [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
     NSLog(@"base64String = %@",base64String);
     
-    self.responseCallback([self DataTOjsonString:base64String]);
+    self.imageResponseCallback([self DataTOjsonString:base64String]);
 }
 
 #pragma mark - compress iamge
@@ -951,22 +925,7 @@
 }
 
 #pragma mark - KVO
-//-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
-//{
-//    if ([keyPath isEqualToString:@"estimatedProgress"]) {
-//        self.progressView.progress = self.webView.estimatedProgress;
-//        if (self.progressView.progress == 1) {
-//            __weak typeof(self) weakSelf = self;
-//            [UIView animateWithDuration:0.25 delay:0.3 options:UIViewAnimationOptionCurveEaseOut animations:^{
-//                weakSelf.progressView.transform = CGAffineTransformMakeScale(1.0f, 1.4f);
-//            } completion:^(BOOL finished) {
-//                weakSelf.progressView.hidden = YES;
-//            }];
-//        }
-//    } else {
-//        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-//    }
-//}
+
 
 #pragma mark - delete web cache
 -(void)deleteWebCache

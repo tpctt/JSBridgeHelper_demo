@@ -61,21 +61,7 @@
         [testVC chooseComputingBlock:^(NSString *computing, NSString *valueString) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"选择的环境");
-                baseUrl = computing;
-                
-                if ([computing isEqualToString:@"SIT"]) {
-                    baseUrl = strBaseUrlInSitEvn;
-                }else if ([computing isEqualToString:@"DEV"] ) {
-                    
-                    baseUrl = valueString;
-                    
-                }else if ([computing isEqualToString:@"PRO"] ) {
-                    baseUrl = strBaseUrlInSitEvn;
-                }else if ([computing isEqualToString:@"API Demo"]) {
-                    baseUrl = strBaseUrlInSit2Evn;
-                }else if ([computing isEqualToString:@"LOCALDEMO"]) {
-                    baseUrl = strBaseUrlInSit3Evn;
-                }
+                baseUrl = valueString;
                 
                 
                 [self dismissViewControllerAnimated:YES completion:nil];

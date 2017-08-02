@@ -2,11 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>DEV</key>
+	<key>#DEV</key>
 	<string></string>
 	<key>API Demo</key>
 	<string>http://test.taoqian123.com.cn/</string>
 	<key>LOCALDEMO</key>
 	<string>http://192.168.1.197:3000/</string>
+	<key>https_demo</key>
+	<string>https://api.taoqian123.com/test/</string>
 </dict>
 </plist>

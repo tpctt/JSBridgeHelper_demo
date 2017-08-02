@@ -10,27 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JSBridgeDemo/ViewController.m"
-            timestampString = "523266413.787394"
+            timestampString = "523338390.492901"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "160"
-            endingLineNumber = "160"
-            landmarkName = "-viewWillAppear:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "JSBridgeDemo/ViewController.m"
-            timestampString = "523266413.787394"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "833"
-            endingLineNumber = "833"
+            startingLineNumber = "802"
+            endingLineNumber = "802"
             landmarkName = "-locationAction"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,60 +26,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JSBridgeDemo/ViewController.m"
-            timestampString = "523266413.787394"
+            timestampString = "523338390.492901"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "773"
-            endingLineNumber = "773"
+            startingLineNumber = "744"
+            endingLineNumber = "744"
             landmarkName = "-photographAction"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__34-[ViewController photographAction]_block_invoke"
-                  moduleName = "JSBridgeDemo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/tim/Downloads/JSBridgeDemo_01/JSBridgeDemo/ViewController.m"
-                  timestampString = "523266414.849952"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "773"
-                  endingLineNumber = "773"
-                  offsetFromSymbolStart = "1008">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__copy_helper_block_.612"
-                  moduleName = "JSBridgeDemo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/tim/Downloads/JSBridgeDemo_01/JSBridgeDemo/ViewController.m"
-                  timestampString = "523266414.85318"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "773"
-                  endingLineNumber = "773"
-                  offsetFromSymbolStart = "51">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__destroy_helper_block_.613"
-                  moduleName = "JSBridgeDemo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/tim/Downloads/JSBridgeDemo_01/JSBridgeDemo/ViewController.m"
-                  timestampString = "523266414.856491"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "773"
-                  endingLineNumber = "773"
-                  offsetFromSymbolStart = "29">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -105,60 +42,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JSBridgeDemo/ViewController.m"
-            timestampString = "523266413.787394"
+            timestampString = "523338390.492901"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "735"
-            endingLineNumber = "735"
+            startingLineNumber = "706"
+            endingLineNumber = "706"
             landmarkName = "-getAddressBookInformation"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__43-[ViewController getAddressBookInformation]_block_invoke"
-                  moduleName = "JSBridgeDemo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/tim/Downloads/JSBridgeDemo_01/JSBridgeDemo/ViewController.m"
-                  timestampString = "523266414.864834"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "735"
-                  endingLineNumber = "735"
-                  offsetFromSymbolStart = "391">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__copy_helper_block_.577"
-                  moduleName = "JSBridgeDemo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/tim/Downloads/JSBridgeDemo_01/JSBridgeDemo/ViewController.m"
-                  timestampString = "523266414.867998"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "735"
-                  endingLineNumber = "735"
-                  offsetFromSymbolStart = "51">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__destroy_helper_block_.578"
-                  moduleName = "JSBridgeDemo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/tim/Downloads/JSBridgeDemo_01/JSBridgeDemo/ViewController.m"
-                  timestampString = "523266414.871179"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "735"
-                  endingLineNumber = "735"
-                  offsetFromSymbolStart = "29">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -168,60 +58,125 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JSBridgeDemo/ViewController.m"
-            timestampString = "523266413.787394"
+            timestampString = "523338390.492901"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "422"
-            endingLineNumber = "422"
+            startingLineNumber = "428"
+            endingLineNumber = "428"
             landmarkName = "-setNavigationBar"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__34-[ViewController setNavigationBar]_block_invoke"
-                  moduleName = "JSBridgeDemo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/tim/Downloads/JSBridgeDemo_01/JSBridgeDemo/ViewController.m"
-                  timestampString = "523266414.881469"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "423"
-                  endingLineNumber = "423"
-                  offsetFromSymbolStart = "316">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__copy_helper_block_.362"
-                  moduleName = "JSBridgeDemo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/tim/Downloads/JSBridgeDemo_01/JSBridgeDemo/ViewController.m"
-                  timestampString = "523266414.885266"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "423"
-                  endingLineNumber = "423"
-                  offsetFromSymbolStart = "111">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__destroy_helper_block_.363"
-                  moduleName = "JSBridgeDemo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/tim/Downloads/JSBridgeDemo_01/JSBridgeDemo/ViewController.m"
-                  timestampString = "523266414.888912"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "423"
-                  endingLineNumber = "423"
-                  offsetFromSymbolStart = "55">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "JSBridgeDemo/ViewController.m"
+            timestampString = "523338390.492901"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "953"
+            endingLineNumber = "953"
+            landmarkName = "-didLogout:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "JSBridgeDemo/ViewController.m"
+            timestampString = "523338390.492901"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "958"
+            endingLineNumber = "958"
+            landmarkName = "-didLogin:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "JSBridgeDemo/ViewController.m"
+            timestampString = "523338390.492901"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "945"
+            endingLineNumber = "945"
+            landmarkName = "-deleteWebCache"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "JSBridgeDemo/ChooseEnvironment/TestViewController.m"
+            timestampString = "523332829.88494"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
+            landmarkName = "-textFieldShouldReturn:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "JSBridgeDemo/ChooseEnvironment/TestViewController.m"
+            timestampString = "523332657.581236"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "-viewDidLoad"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "JSBridgeDemo/ChooseEnvironment/TestViewController.m"
+            timestampString = "523332672.447248"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
+            landmarkName = "-viewDidLoad"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "JSBridgeDemo/ChooseEnvironment/TestViewController.m"
+            timestampString = "523332714.13396"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "203"
+            endingLineNumber = "203"
+            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

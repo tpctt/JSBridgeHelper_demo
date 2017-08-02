@@ -56,12 +56,16 @@
     
     UILabel *currentUrlDesLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(tipLabel.frame), KScreenWidth, 40)];
     self.currentUrlDesLabel = currentUrlDesLabel;
-    currentUrlDesLabel.text = @"DEV";
+    currentUrlDesLabel.text = @"环境名称";
     currentUrlDesLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:currentUrlDesLabel];
     
     UITextField *currentUrlTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(currentUrlDesLabel.frame), KScreenWidth, 40)];
-    currentUrlTextField.text = [self.computingDict objectForKey:@"DEV"];
+    currentUrlTextField.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"dev_url"];
+    
+    //currentUrlTextField.text = [self.computingDict objectForKey:@"DEV"];
+    
+    
     self.currentUrlTextField = currentUrlTextField;
     currentUrlTextField.textAlignment = NSTextAlignmentCenter;
     currentUrlTextField.returnKeyType = UIReturnKeyGo;
@@ -70,8 +74,16 @@
     
     [self.view addSubview:self.tableView];
     
-    [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
-
+    
+    NSInteger index = [[[NSUserDefaults standardUserDefaults]objectForKey:@"last_row"] integerValue];
+    @try {
+        [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+    } @catch (NSException *exception) {
+        
+    } @finally {
+        
+    }
+    
 }
 
 
@@ -190,10 +202,24 @@
     self.currentSelectIndex = indexPath.row;
     self.currentUrlDesLabel.text = [self.computingDict allKeys][indexPath.row];
     self.currentUrlTextField.text = [self.computingDict objectForKey:self.currentUrlDesLabel.text];
-    if (indexPath.row == 0) {
+    
+    if (self.currentUrlTextField.text.length == 0) {
+        
+        self.currentUrlTextField.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"dev_url"];
         [self.currentUrlTextField becomeFirstResponder];
+        
+    }else{
+        [self.currentUrlTextField resignFirstResponder];
+        
     }
+    
     [self.tableView reloadData];
+    
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@(indexPath.row) forKey:@"last_row"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    
 }
 
 - (void)commitButtonClicked
@@ -211,6 +237,13 @@
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [self.currentUrlTextField resignFirstResponder];
+    
+    if (textField.text.length) {
+        [[NSUserDefaults standardUserDefaults] setObject:textField.text forKey:@"dev_url"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+    }
+    
     [self commitButtonClicked];
     return YES;
 }
