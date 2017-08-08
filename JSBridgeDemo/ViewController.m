@@ -761,14 +761,14 @@
                     UIImagePickerController *pickerViewController = [[UIImagePickerController alloc] init];
                     pickerViewController.delegate = self;
                     pickerViewController.allowsEditing = NO;
-                    pickerViewController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                    pickerViewController.sourceType = UIImagePickerControllerSourceTypeCamera;
                     self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
                     [self presentViewController:pickerViewController animated:YES completion:nil];
                 });
                 
             }else{
                 NSDictionary * dict = @{@"code":@"-1",@"msg":@"设备不支持相机"};
-                self.responseCallback([self DictTOjsonString:dict]);
+                self.imageResponseCallback([self DictTOjsonString:dict]);
                 
             }
         } else {
@@ -970,12 +970,11 @@
     NSLog(@"%ld,",(long)buttonIndex);
 
     if (buttonIndex == 1) {
-
-        [self photographAction];
+        [self cameraAction];
 
     }else if (buttonIndex  == 2){
         
-        [self cameraAction];
+        [self photographAction];
 
     }
     
