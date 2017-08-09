@@ -871,7 +871,7 @@
 -(void)handlePicture:(UIImage *)image
 {
     image = [image fixOrientation:image];
-    image = [image rotate:UIImageOrientationLeft];
+//    image = [image rotate:UIImageOrientationLeft];
 //    image = [image imageRotatedByDegrees:0.0f];
     NSLog(@"image.size1 = %@",[NSValue valueWithCGSize:image.size]);
     NSData *data = UIImageJPEGRepresentation(image, 0.1f);
