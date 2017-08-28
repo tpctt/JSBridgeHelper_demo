@@ -10,7 +10,6 @@
 #import "SpecificPopulationCell.h"
 #import <Masonry/Masonry.h>
 #import "defines.h"
-#import "ViewController.h"
 
 @interface TestViewController () <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 @property (nonatomic, weak) UILabel *currentUrlDesLabel;

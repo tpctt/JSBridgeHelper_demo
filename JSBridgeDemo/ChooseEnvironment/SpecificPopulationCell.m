@@ -20,9 +20,6 @@
 }
 
 
-
-
-
 -(void)creaeUI{
 
     [self.contentView addSubview:self.mainTitleLabel];

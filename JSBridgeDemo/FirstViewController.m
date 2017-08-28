@@ -8,10 +8,11 @@
 
 #import "FirstViewController.h"
 #import "TestViewController.h"
-#import "constant.h"
+//#import "constant.h"
 #import "defines.h"
-#import "ViewController.h"
-#import "WKViewController.h"
+#import "BaseToWebViewController.h"
+
+#import "TQBJSBridgeHelper.h"
 
 @interface FirstViewController ()
 
@@ -60,16 +61,13 @@
         
         [testVC chooseComputingBlock:^(NSString *computing, NSString *valueString) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"选择的环境");
-                baseUrl = valueString;
-                
                 
                 [self dismissViewControllerAnimated:YES completion:nil];
-                
-                ViewController *webViewController;
+
+                BaseToWebViewController * ViewController;
                 if ([WKWebView class]) {
-                    webViewController = [[ViewController alloc] init];
-                    [self.navigationController pushViewController:webViewController animated:YES];
+                    ViewController = [[BaseToWebViewController alloc] initWithURLString:valueString];
+                    [self.navigationController pushViewController:ViewController animated:YES];
                 }
                 
             });

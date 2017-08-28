@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "ViewController.h"
 #import "LocationTools.h"
 #import "TestViewController.h"
 #import "FirstViewController.h"
@@ -23,9 +22,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:[[FirstViewController alloc] init]];
+    _navi= [[UINavigationController alloc] initWithRootViewController:[[FirstViewController alloc] init]];
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.rootViewController = navi;
+    self.window.rootViewController = _navi;
     
     [[LocationTools sharedInstance] getCurrentLocation:^(CLLocation *location, CLPlacemark *pl, NSString *error, BOOL loading) {
         

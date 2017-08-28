@@ -10,7 +10,6 @@
 
 @interface TQBPreviewController : UIViewController
 
-
 @property (nonatomic, strong) NSArray * imageArray;
 
 

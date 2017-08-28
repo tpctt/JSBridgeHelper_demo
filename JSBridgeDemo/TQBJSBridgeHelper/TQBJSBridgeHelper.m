@@ -1,145 +1,129 @@
 //
-//  ViewController.m
-//  JSBridgeDemo
+//  TQBJSBridgeHelper.m
+//  taoqianbao
 //
-//  Created by gomeguomingyue on 2017/4/27.
-//  Copyright © 2017年 gomeguomingyue. All rights reserved.
-//  
-
-#import "ViewController.h"
-#import "WKWebViewJavascriptBridge.h"
-#import "WebViewJavascriptBridge.h"
-
-
-#import "GMSystemAuthorizationTool.h"
-#import <MobileCoreServices/MobileCoreServices.h>
-#import "UIDevice+tools.h"
-
-#import <AdSupport/AdSupport.h>
-
-//通讯录
-#import <AddressBook/AddressBook.h>
-#import <AddressBookUI/AddressBookUI.h>
-
-
+//  Created by tim on 2017/8/7.
+//  Copyright © 2017年 tim. All rights reserved.
 //
-#import "TQBPreviewController.h"
 
-#import "SXAddressBookManager.h"
-#import "MYFDefines.h"
+#import "TQBJSBridgeHelper.h"
+#import "UIAlertView+Blocks.h"
+#import "UIButton+EasyExtend.h"
 
-#import "LocationTools.h"
-#import "TestViewController.h"
-#import "constant.h"
-#import "defines.h"
-#import "UIImage+Rotate.h"
-
-#import "TQBNewWebViewController.h"
 #import "LoginOutViewController.h"
+#import "AppDelegate.h"
+static NSString * const TQBLoginNotification = @"com.taoqian123.taoqianbao.LoginNotification";
+static NSString * const TQBLogoutinNotification = @"com.taoqian123.taoqianbao.LogoutNotification";
+static NSString * const TQBRegNotification = @"com.taoqian123.taoqianbao.regNotification";
+static NSString * const TQBUpdateUserInfoNotification = @"com.taoqian123.taoqianbao.UpdateUserInfoNotification";
 
-
-@interface ViewController ()< UIWebViewDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate,ABPeoplePickerNavigationControllerDelegate,UIAlertViewDelegate , LoginOutDelegate  >
-
-@property WebViewJavascriptBridge * bridge;
-
-@property (nonatomic, strong) UIWebView* webView;
-
-@property (nonatomic, copy) WVJBResponseCallback responseCallback;//通用,无需权限验证的
-@property (nonatomic, copy) WVJBResponseCallback imageResponseCallback;//照片
-@property (nonatomic, copy) WVJBResponseCallback locationResponseCallback;//定位
-@property (nonatomic, strong) WVJBResponseCallback phoneCallBack;//拨打电话
-@property (nonatomic, strong) WVJBResponseCallback addressBookCallBack; //获取通讯录
-@property (nonatomic, strong) WVJBResponseCallback shareCallBack; //分享回调
-@property (nonatomic, strong) WVJBResponseCallback previewImageCallBack; // 预览回调
-
-
-@property(nonatomic,strong)NSArray<SXPersonInfoEntity *>*personEntityArray;
-
-
-@property (nonatomic, strong) UIProgressView *progressView;
-
+@interface TQBJSBridgeHelper()
+@property (strong,nonatomic) NSString *activePath;
+@property (strong,nonatomic) UIButton *rightBtn;
 @end
 
-@implementation ViewController
 
+@implementation TQBJSBridgeHelper
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
-    self.title = @"JavaScriptBridge";
-    //  = UIRectEdgeAll;
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    self.navigationController.navigationBarHidden = NO;
-    
-    //初始化progressView
-    self.progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(0, 20, DEVICE_WIDTH, 2.0f)];
-    self.progressView.backgroundColor = [UIColor blueColor];
-    self.progressView.transform = CGAffineTransformMakeScale(1.0, 1.5f);
-    [self.view addSubview:self.progressView];
-    
     //清理缓存
     [self deleteWebCache];
     
-    NSString* htmlPath = [[NSBundle mainBundle] pathForResource:@"js" ofType:@"js"];
-    NSString* appHtml = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
-    NSURL *baseURL = [NSURL fileURLWithPath:htmlPath];
-    NSString *js =[NSString stringWithContentsOfURL:baseURL encoding:NSUTF8StringEncoding error:nil];
     
-    [self.webView stringByEvaluatingJavaScriptFromString:js];
     
 }
-
--(void)viewWillAppear:(BOOL)animated
+-(void)dealloc
 {
-    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+}
+-(void)addSomeNotify
+{
+    {
+        __weak typeof(self) weakSelf = self;
+        
+//        [TQBUserObject sharedInstance].enableLoginRegNotifaction = NO;
+//        ///监听登录
+//        
+//        
+//        
+//        [[[[NSNotificationCenter defaultCenter]rac_addObserverForName:TQBLoginNotification object:nil]
+//          merge:
+//          [[NSNotificationCenter defaultCenter]rac_addObserverForName:TQBRegNotification object:nil] ]
+//         
+//         subscribeNext:^(NSNotification * noti ) {
+//             
+//             if (weakSelf.loginResponseCallback) {
+//                 NSDictionary * dict = @{@"code":@"0",@"msg":@"sucess",@"data":[TQBUserObject sharedInstance].access_token?:@""};
+//                 weakSelf.loginResponseCallback([self DictTOjsonString:dict]);
+//                 weakSelf.loginResponseCallback = nil;
+//                 
+//             }
+//             
+//         }];
+//        
+//        
+//        ///监听注册
+//        [[[NSNotificationCenter defaultCenter]rac_addObserverForName:TQBRegNotification object:nil]
+//         
+//         subscribeNext:^(NSNotification * noti ) {
+//             
+//             if (weakSelf.regResponseCallback) {
+//                 NSDictionary * dict = @{@"code":@"0",@"msg":@"sucess",@"data":[TQBUserObject sharedInstance].access_token?:@""};
+//                 weakSelf.regResponseCallback([self DictTOjsonString:dict]);
+//                 weakSelf.regResponseCallback = nil;
+//                 
+//             }
+//             
+//         }];
+        
+        
+    }
+    
+    
+}
+-(void)injectJSBridge
+{
+    [self addSomeNotify];
     
     //初始化环境和相关组件
     if (_bridge) {
         return;
     }
     /*
-    WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
-    configuration.userContentController = [WKUserContentController new];
-    
-    WKPreferences *preferences = [WKPreferences new];
-    preferences.javaScriptCanOpenWindowsAutomatically = YES;
-    preferences.minimumFontSize = 30.0;
-    configuration.preferences = preferences;
+     WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+     configuration.userContentController = [WKUserContentController new];
+     
+     WKPreferences *preferences = [WKPreferences new];
+     preferences.javaScriptCanOpenWindowsAutomatically = YES;
+     preferences.minimumFontSize = 30.0;
+     configuration.preferences = preferences;
      */
-    
-    self.webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 64, DEVICE_WIDTH, DEVICE_HEIGHT-64)];
-    //self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds];
-    //self.webView.navigationDelegate = self;
-    self.webView.delegate = self;
-    
-    self.webView.scrollView.showsVerticalScrollIndicator = NO;
-    self.webView.scrollView.showsHorizontalScrollIndicator = NO;
-    [self.view addSubview:self.webView];
-//    [self.webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
     
     [WebViewJavascriptBridge enableLogging];
     _bridge = [WebViewJavascriptBridge bridgeForWebView:self.webView];
-    [_bridge setWebViewDelegate:self];
+    [_bridge setWebViewDelegate:self.webViewController];
     
     //注册方法
     __weak typeof(self) weakSelf = self;
     
+    ///拍照
     [_bridge registerHandler:@"chooseImage" handler:^(id data, WVJBResponseCallback responseCallback) {
-        NSLog(@"call back gome_getphoto:%@",data);
+        NSLog(@"call back chooseImage:%@",data);
         weakSelf.imageResponseCallback = responseCallback;
         
         ///album 从相册选图，camera 使用相机，无数据/其他的时候 二者都允许
         NSString *source = [data objectForKey:@"sourceType"];
         if ([source isEqualToString:@"album"]) {
-            [self photographAction];
-
+            [weakSelf photographAction];
+            
         }else  if ([source isEqualToString:@"camera"]) {
-            [self cameraAction];
+            [weakSelf cameraAction];
             
         }else{
             //初始化AlertView
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"请选择"
                                                             message:nil
-                                                           delegate:self
+                                                           delegate:weakSelf
                                                   cancelButtonTitle:@"取消"
                                                   otherButtonTitles:@"相机",nil];
             //通过给定标题添加按钮
@@ -150,7 +134,6 @@
         
     }];
     // 预览一组图片
-    
     [_bridge registerHandler:@"previewImage" handler:^(id data, WVJBResponseCallback responseCallback) {
         
         weakSelf.previewImageCallBack  = responseCallback;
@@ -160,20 +143,23 @@
         TQBPreviewController  *vc = [[TQBPreviewController alloc] init];
         vc.imageArray = array;
         
-        [self.navigationController pushViewController:vc animated:YES];
+        //nil判定
+        [weakSelf.webViewController.navigationController pushViewController:vc animated:YES];
+        
         
     }];
     
+    //拨打电话
     [_bridge registerHandler:@"makePhoneCall" handler:^(id data, WVJBResponseCallback responseCallback) {
-        NSLog(@"call back gome_getphoto:%@",data);
+        NSLog(@"call back makePhoneCall:%@",data);
         weakSelf.phoneCallBack = responseCallback;
         
         //直接从data中解析
-
+        
         NSDictionary * dict = (NSDictionary *)data;
         NSString * phone = [dict objectForKey:@"phoneNumber"];
         
-        [self makePhoneCall:phone];
+        [weakSelf makePhoneCall:phone];
         
     }];
     
@@ -186,23 +172,23 @@
         NSLog(@"%@",pasteboard.string);
     }];
     
-
-  //  获取系统剪贴板内容
+    
+    //  获取系统剪贴板内容
     [_bridge registerHandler:@"getClipboardData" handler:^(id data, WVJBResponseCallback responseCallback) {
-
+        
         //直接从data中解析
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         
-        responseCallback( [self DataTOjsonString:pasteboard.string]);
+        responseCallback( [weakSelf DataTOjsonString:pasteboard.string]);
     }];
     
     //获取经纬度
     [_bridge registerHandler:@"getLocation" handler:^(id data, WVJBResponseCallback responseCallback) {
-        NSLog(@"call back gome_getgps:%@",data);
+        NSLog(@"call back getLocation:%@",data);
         weakSelf.locationResponseCallback = responseCallback;
         [weakSelf locationAction];
     }];
-
+    
     
     // 获取通讯录功能
     [_bridge registerHandler:@"getAddressBook" handler:^(id data, WVJBResponseCallback responseCallback) {
@@ -220,29 +206,62 @@
         
     }];
     
-
+    
     //登录
     [_bridge registerHandler:@"login" handler:^(id data, WVJBResponseCallback responseCallback) {
         
-        weakSelf.responseCallback  = responseCallback;
+        weakSelf.loginResponseCallback  = responseCallback;
+
         
-        LoginOutViewController *vc = [LoginOutViewController new];
-        vc.delegate = self;
-        [self presentViewController:vc animated:1 completion:^{
-            
-        }];
+        
+        AppDelegate * appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+        
+        LoginOutViewController *vc = [[LoginOutViewController alloc] init];
+        
+        
+        
+        [appDelegate.navi           pushViewController:vc animated:YES];
+
+//        [[Config sharedInstance]gotoLogin];
+        //  登录通知
         
     }];
-    
+    //注册
+    [_bridge registerHandler:@"register" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        weakSelf.regResponseCallback  = responseCallback;
+        
+        NSDictionary *info = data;
+        NSString *idenify = [info objectForKey:@"idenify"];
+
+        AppDelegate * appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+        LoginOutViewController *vc = [[LoginOutViewController alloc] init];
+        
+        [appDelegate.navi           pushViewController:vc animated:YES];
+        
+    }];
     //注销
     [_bridge registerHandler:@"logout" handler:^(id data, WVJBResponseCallback responseCallback) {
         
         weakSelf.responseCallback  = responseCallback;
-        LoginOutViewController *vc = [LoginOutViewController new];
-        vc.delegate = self;
-        [self presentViewController:vc animated:1 completion:^{
-            
+        
+        [UIAlertView showWithTitle:@"注销登录?" message: nil cancelButtonTitle:@"取消" otherButtonTitles:@[@"确定"] tapBlock:^(UIAlertView * _Nonnull alertView, NSInteger buttonIndex) {
+            if (buttonIndex == 1) {
+                
+                [[NSNotificationCenter defaultCenter]postNotificationName:TQBUpdateUserInfoNotification object:nil];
+                
+                NSDictionary * dict = @{@"code":@"0",@"msg":@"注销成功"};
+                self.responseCallback([self DictTOjsonString:dict]);
+                
+                
+            }else{
+                NSDictionary * dict = @{@"code":@"-1",@"msg":@"用户取消"};
+                self.responseCallback([self DictTOjsonString:dict]);
+                
+                
+            }
         }];
+        
         
     }];
     
@@ -264,21 +283,37 @@
     //获取分享信息
     [_bridge registerHandler:@"shareInfo" handler:^(id data, WVJBResponseCallback responseCallback) {
         
-        weakSelf.shareCallBack  = self.shareCallBack;
-
+        weakSelf.shareCallBack  = responseCallback;
+        
+        NSDictionary *info = data;
+        [weakSelf shareSomeInfo:info];
+        
+        
     }];
     
-  
     
-
+    //获取协议版本
+    [_bridge registerHandler:@"jsProxyVer" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        weakSelf.responseCallback  = responseCallback;
+        
+        NSDictionary * dict = @{@"code":@"0",@"msg":@"获取JS功能版本成功",@"data":@"v0.1"};
+        weakSelf.responseCallback([weakSelf DictTOjsonString:dict]);
+        
+        
+        
+    }];
+    
+    
+    
     //设置导航栏相关的代码
     [self setNavigationBar];
     
-    //加载页面
-    [self loadExamplePage:self.webView];
     
     
 }
+
+
 -(void)getUserInfo
 {
     //app软件
@@ -286,24 +321,22 @@
     NSString*  appVersion =[NSString stringWithFormat:@"%@",  [appInfoDict objectForKey:@"CFBundleShortVersionString"]  ];
     
     NSString *idfa = [ASIdentifierManager sharedManager].advertisingIdentifier.UUIDString;
-
+    
     
     NSDictionary *info =
-  @{@"accesstoken":@"data.accesstoken demo 无数据",
-    @"session_id":@"session_id demo 无数据",
-    @"registration_id":@"registration_id demo 无数据",
-    @"deviceToken":@"deviceToken demo 无数据",
-
-    
-    
-    @"font":@"2",
-    @"channel_id":@"0",///AppStore
-    @"city_id":@"123",//假如是成都
-    @"appver":appVersion,
-    @"imei":idfa
-    
-                           
-                           };
+    @{@"accesstoken":@"098098098",
+      @"session_id":@"098098098",
+      @"registration_id":@"098098098",
+      @"deviceToken":@"098098098",
+      
+      
+      @"font":@"2",
+      @"channel_id":@"0",///AppStore
+      @"city_id":@"成都",//假如是成都
+      @"appver":appVersion,
+      @"imei":idfa
+      
+      };
     
     self.responseCallback([self DataTOjsonString:info]);
     
@@ -318,17 +351,18 @@
 }
 -(void)makePhoneCall:(NSString *)phone
 {
+    __weak typeof(self) weakSelf = self;
     
     NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",phone];
     if ([[UIApplication sharedApplication]canOpenURL:[NSURL URLWithString:str]]) {
         UIWebView  *  callWebview = [[UIWebView alloc] init];
         [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
-        [self.view addSubview:callWebview];
-        self.responseCallback([self DataTOjsonString:@"设备支持拨打电话"]);
-
+        [weakSelf.webViewController.view addSubview:callWebview];
+        weakSelf.phoneCallBack([weakSelf DataTOjsonString:@"设备支持拨打电话"]);
+        
     }else{
         NSDictionary * dict = @{@"code":@"-1",@"msg":@"设备不支持拨打电话"};
-        self.responseCallback([self DictTOjsonString:dict]);
+        weakSelf.phoneCallBack([weakSelf DictTOjsonString:dict]);
         
     }
     
@@ -406,8 +440,8 @@
     [info setObject:idfa forKey:@"imei"];
     
     [info setObject:appVersion forKey:@"appVer"];
-
-   
+    
+    
     
     
     
@@ -420,153 +454,220 @@
 {
     
     __weak typeof(self) weakSelf = self;
-
+    __weak typeof(BaseToWebViewController) *weakWebVC = self.webViewController;
+    
     [_bridge registerHandler:@"setNavigationBarTitle" handler:^(id data, WVJBResponseCallback responseCallback) {
-
+        
         weakSelf.responseCallback  = responseCallback;
-
+        
         NSDictionary * info = (NSDictionary * )data;
-        weakSelf.title = [info objectForKey:@"title"];
+        weakWebVC.title = [info objectForKey:@"title"];
+        
         
         
     }];
-
+    
     [_bridge registerHandler:@"setNavigationBarColor" handler:^(id data, WVJBResponseCallback responseCallback) {
         weakSelf.responseCallback  = responseCallback;
-
+        
         NSDictionary * info = (NSDictionary * )data;
         NSString * frontColor = [info objectForKey:@"frontColor"];
         NSString * backgroundColor = [info objectForKey:@"backgroundColor"];
-        [weakSelf.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],NSForegroundColorAttributeName:[self colorWithHexString:frontColor alpha:1]}] ;
         
-        weakSelf.navigationController.navigationBar.barTintColor = [self colorWithHexString:backgroundColor alpha:1];
-
+        //TODO 通用的 navbar 配置
+        
+        UINavigationBar *bar = [weakWebVC.navigationController navigationBar];
+//        [bar gjw_setBackgroundColor:[weakSelf colorWithHexString:backgroundColor alpha:1]];
+//        [bar gjw_setTitleAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],NSForegroundColorAttributeName:[self colorWithHexString:frontColor alpha:1]}];
+//        [bar gjw_setShadowImage:nil];
+        
+        
+        //        [weakWebVC.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],NSForegroundColorAttributeName:[self colorWithHexString:frontColor alpha:1]}] ;
+        //        weakWebVC.navigationController.navigationBar.barTintColor = [self colorWithHexString:backgroundColor alpha:1];
+        
         
     }];
     
     [_bridge registerHandler:@"showNavigationBar" handler:^(id data, WVJBResponseCallback responseCallback) {
         weakSelf.responseCallback  = responseCallback;
-
-        weakSelf.navigationController.navigationBarHidden = NO;
+        
+        weakWebVC.navigationController.navigationBarHidden = NO;
         
     }];
     
-
+    
     [_bridge registerHandler:@"hideNavigationBar" handler:^(id data, WVJBResponseCallback responseCallback) {
         weakSelf.responseCallback  = responseCallback;
-
-        weakSelf.navigationController.navigationBarHidden = YES;
+        
+        weakWebVC.navigationController.navigationBarHidden = YES;
         
     }];
+    
+    //    给右上角设置一个按钮,方便网页实现对应的功能
+    [_bridge registerHandler:@"setNavbarRightBtn" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        weakSelf.navbarRightBtnresponseCallback  = responseCallback;
+        NSDictionary * info = (NSDictionary * )data;
+        [weakSelf setNavBarRightBtn:info];
+        
+    }];
+    
     
     [self setWeb];
     
-    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    backButton.frame = CGRectMake(10, 20, 15, 15);
-    [backButton setBackgroundImage:[UIImage imageNamed:@"nav_return"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:backButton];
+    
+//    [RACObserve(self.webViewController.navigationItem, rightBarButtonItem)subscribeNext:^(id x) {
+//        
+//    }];
+//    [RACObserve(self.webViewController.navigationItem, rightBarButtonItems)subscribeNext:^(id x) {
+//        
+//    }];
+}
+-(void)setCurrentUrl:(NSString *)currentUrl
+{
+    if (_currentUrl == currentUrl) {
+        return;
+    }
+    _currentUrl = currentUrl;
+    
+    [self checkRightBtnState];
     
 }
-
--(void)setWeb
+-(void)viewWillAppear
 {
+    [self checkRightBtnState];
     
+}
+-(void)checkRightBtnState{
+    
+    if (self.activePath && [self.currentUrl hasPrefix:self.activePath]) {
+        ///add
+        self.webViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView: self.rightBtn ];
+
+
+        if (self.rightBtn) {
+            NSMutableArray *rightItems = [self.webViewController.navigationItem.rightBarButtonItems mutableCopy];
+            if (rightItems == nil) {
+                rightItems = [NSMutableArray array];
+                
+            }
+            
+            
+            UIBarButtonItem *temp = nil;
+            
+            for (UIBarButtonItem *item in rightItems ) {
+                if (item.customView == self.rightBtn) {
+                    temp = item;
+                    break;
+                }
+            }
+            
+            
+            
+            
+            
+            if (temp) {
+            
+            }else{
+                [rightItems addObject:[[UIBarButtonItem alloc]initWithCustomView: self.rightBtn ]];
+                self.webViewController.navigationItem.rightBarButtonItems = rightItems;
+                
+            }
+        }
+        
+     
+    
+    }else{
+        ///清除
+        if (self.rightBtn) {
+            NSMutableArray *rightItems = [self.webViewController.navigationItem.rightBarButtonItems mutableCopy];
+            if (rightItems == nil) {
+                rightItems = [NSMutableArray array];
+                
+            }
+            
+            UIBarButtonItem *temp = nil;
+            
+            for (UIBarButtonItem *item in rightItems ) {
+                if (item.customView == self.rightBtn) {
+                    temp = item;
+                    break;
+                }
+            }
+            
+            if (temp) {
+                [rightItems removeObject:temp];
+                self.webViewController.navigationItem.rightBarButtonItems = rightItems;
+            }
+        }
+        
+    }
+    
+}
+//    给右上角设置一个按钮,方便网页实现对应的功能
+-(void)setNavBarRightBtn:(NSDictionary *)info
+{
     __weak typeof(self) weakSelf = self;
     
-    [_bridge registerHandler:@"navigateTo" handler:^(id data, WVJBResponseCallback responseCallback) {
-        NSDictionary * info = (NSDictionary * )data;
-
-        NSString * url = [info objectForKey:@"url"];
-        
-        
-//        NSRange range = [url rangeOfString:@"taoqian123"];
-        
-//        if(range.location != NSNotFound)
-        
-//        {
-
-            TQBNewWebViewController * vc  = [[TQBNewWebViewController alloc] init];
-            vc.url = url;
-            [weakSelf.navigationController pushViewController:vc animated:YES];
-    
-
-//        }else{
-        
-            
-//        }
+    NSString * frontColor = [info objectForKey:@"frontColor"]; //文本颜色
+    NSString * title = [info objectForKey:@"title"]; //文本
+    NSString * imageUrl = [info objectForKey:@"imageUrl"];//按钮图片
+    NSString * activePath = [info objectForKey:@"activePath"];//按妞 有效的 url 前缀
     
     
-    }];
-    
-    
-    [_bridge registerHandler:@"redirectTo" handler:^(id data, WVJBResponseCallback responseCallback) {
+    if (self.rightBtn) {
+        NSMutableArray *rightItems = [self.webViewController.navigationItem.rightBarButtonItems mutableCopy];
+        UIBarButtonItem *temp = nil;
         
-        NSDictionary * info = (NSDictionary * )data;
+        for (UIBarButtonItem *item in rightItems ) {
+            if (item.customView == self.rightBtn) {
+                temp = item;
+                break;
+            }
+        }
         
-        NSString * url = [info objectForKey:@"url"];
-        
-        
-//        NSRange range = [url rangeOfString:@"taoqian123"];
-//        
-//        if(range.location != NSNotFound)
-//            
-//        {
-        
-            NSString* htmlPath = url;
-            NSURL *baseURL = [NSURL URLWithString:htmlPath];
-            [weakSelf.webView loadRequest:[NSMutableURLRequest requestWithURL:baseURL]];
-//            
-//        }else{
-//            
-//            
-//          
-//            
-//        }
-    }];
-    
-    [_bridge registerHandler:@"navigateBack" handler:^(id data, WVJBResponseCallback responseCallback) {
-        
-//        NSDictionary * info = (NSDictionary * )data;
-        
-//        NSString * url = [info objectForKey:@"url"];
-        
-        
-//        NSRange range = [url rangeOfString:@"taoqian123"];
-//        
-//        if(range.location != NSNotFound)
-//            
-//        {
-        
-        [weakSelf back:self.navigationItem.leftBarButtonItem];
-            
-//        }else{
-//            
-//            
-//            
-//            
-//        }
-        
-    }];
-    
-}
-
-//用苹果自带的返回键按钮处理如下(自定义的返回按钮)
-- (void)back:(UIBarButtonItem *)btn
-{
-    if ([self.webView canGoBack]) {
-        [self.webView goBack];
-        
-    }else{
-        [self.view resignFirstResponder];
-        [self.navigationController popViewControllerAnimated:YES];
+        if (temp) {
+            [rightItems removeObject:temp];
+            self.webViewController.navigationItem.rightBarButtonItems = rightItems;
+        }
     }
+    
+    
+    
+    UIButton *rightBtn = [[UIButton alloc] initNavigationButtonWithTitle:title color: [ self colorWithHexString:frontColor alpha:1]];
+    [rightBtn addTarget:self action:@selector(navbrRightBtnAct:) forControlEvents:UIControlEventTouchUpInside];
+
+    
+
+    
+    
+    ///有 imageurl 只显示 imageUrl
+    if (imageUrl.length) {
+        [rightBtn setTitle:@"" forState:0];
+        NSURL *url = [NSURL URLWithString: imageUrl];
+        UIImage *imagea = [UIImage imageWithData: [NSData dataWithContentsOfURL:url]];
+        [rightBtn setImage: imagea forState:0];
+        
+//        [rightBtn sd_setImageWithURL:[NSURL URLWithString:imageUrl] forState:0];
+        
+    }
+
+    
+    self.activePath = activePath;
+    self.rightBtn = rightBtn;
+    
+    self.webViewController.rightBtn = rightBtn;
+    [self checkRightBtnState];
+    
+    
 }
+
 
 
 
 - (UIColor *)colorWithHexString:(NSString *)color alpha:(CGFloat)alpha
 {
+    
     //删除字符串中的空格
     NSString *cString = [[color stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] uppercaseString];
     // String should be 6 or 8 characters
@@ -611,35 +712,156 @@
     return [UIColor colorWithRed:((float)r / 255.0f) green:((float)g / 255.0f) blue:((float)b / 255.0f) alpha:alpha];
 }
 
-- (void)loadExamplePage:(UIWebView*)webView {
+
+-(void)navbrRightBtnAct:(UIButton*)sender
+{
+    [_bridge callHandler:@"setNavbarRightBtn2" data:@"uid:123 pwd:123" responseCallback:^(id responseData) {
+        NSLog(@"oc请求js后接受的回调结果：%@",responseData);
+    }];
+}
+
+
+-(void)setWeb
+{
     
-    NSLog(@"baseUrl = %@", baseUrl);
-    NSString* htmlPath = baseUrl;
-    NSURL *baseURL = [NSURL URLWithString:htmlPath];
-    [webView loadRequest:[NSMutableURLRequest requestWithURL:baseURL]];
+    __weak typeof(self) weakSelf = self;
+    __weak typeof(BaseToWebViewController) *weakWebVC = self.webViewController;
     
+    [_bridge registerHandler:@"navigateTo" handler:^(id data, WVJBResponseCallback responseCallback) {
+        NSDictionary * info = (NSDictionary * )data;
+        
+        NSString * url = [info objectForKey:@"url"];
+        
+        
+        //        NSRange range = [url rangeOfString:@"taoqian123"];
+        
+        //        if(range.location != NSNotFound)
+        
+        //        {
+        
+        BaseToWebViewController * vc  = [[BaseToWebViewController alloc] initWithURLString:url];
+        //        vc.url = url;
+        [weakWebVC.navigationController pushViewController:vc animated:YES];
+        
+        
+        //        }else{
+        
+        
+        //        }
+        
+        
+    }];
+    
+    
+    [_bridge registerHandler:@"redirectTo" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        NSDictionary * info = (NSDictionary * )data;
+        
+        NSString * url = [info objectForKey:@"url"];
+        
+        
+        //        NSRange range = [url rangeOfString:@"taoqian123"];
+        //
+        //        if(range.location != NSNotFound)
+        //
+        //        {
+        
+        NSString* htmlPath = url;
+        NSURL *baseURL = [NSURL URLWithString:htmlPath];
+        [weakSelf.webView loadRequest:[NSMutableURLRequest requestWithURL:baseURL]];
+        //
+        //        }else{
+        //
+        //
+        //
+        //
+        //        }
+    }];
+    
+    [_bridge registerHandler:@"navigateBack" handler:^(id data, WVJBResponseCallback responseCallback) {
+        
+        //        [weakWebVC backItemAct:nil];
+        [weakWebVC.navigationController popViewControllerAnimated:YES];
+        
+    }];
+    
+}
+
+
+
+
+-(void)shareSomeInfo:(NSDictionary *)dict
+{
+    __weak typeof(self) weakSelf = self;
+    __weak typeof(BaseToWebViewController) *weakWebVC = self.webViewController;
+    
+    
+    NSString *title = [dict objectForKey:@"title"];
+    NSString *content = [dict objectForKey:@"text"];
+    NSString *imageUrl = [dict objectForKey:@"image"];
+    NSString *herf = [dict objectForKey:@"url"];
+    //获取分享 id
+    NSString *count = [dict objectForKey:@"count"];
+    
+//    imageUrl = [imageUrl urldecode];
+//    herf = [herf urldecode];
+//    
+//    if(!self.webViewController.shareModel){
+//        self.webViewController.shareModel = [[TQBShareResultViewModel alloc] init];
+//        
+//    }
+//    
+//    
+//    if(title && content && imageUrl && herf ){
+//        
+//        [[AppDelegate shareInstance]shareInfo:title content:content image:imageUrl url:herf actionSheet:self.webViewController.rightBtn onShareStateChanged:^(BOOL sucess, NSString *msg) {
+//            
+//            if (sucess == YES) {
+//                if (count) {
+//                    weakSelf.webViewController.shareModel.count = count;
+//                    [weakSelf.webViewController.shareModel.command execute:nil];
+//                    
+//                }
+//                NSDictionary * dict = @{@"code":@"0",@"msg":@"分享成功"};
+//                weakSelf.shareCallBack([weakSelf DictTOjsonString:dict]);
+//                
+//            }else{
+//                NSDictionary * dict = @{@"code":@"-1",@"msg": msg?:@""};
+//                weakSelf.shareCallBack([weakSelf DictTOjsonString:dict]);
+//                
+//            }
+//            
+//        } activePlatforms:nil];
+//    }else{
+//        NSDictionary * dict = @{@"code":@"-1",@"msg":@"分享数据缺失"};
+//        self.shareCallBack([weakSelf DictTOjsonString:dict]);
+//        
+//    }
 }
 
 -(void)getAllAddressBookInformation
 {
-
+    __weak typeof(self) weakSelf = self;
+    __weak typeof(BaseToWebViewController) *weakWebVC = self.webViewController;
+    
+    
     SXAddressBookAuthStatus status = [[SXAddressBookManager manager]getAuthStatus];
     if (status == kSXAddressBookAuthStatusNotDetermined) {
         
         [[SXAddressBookManager manager]askUserWithSuccess:^{
-            self.personEntityArray = [[SXAddressBookManager manager]getPersonInfoArray];
+            weakSelf.personEntityArray = [[SXAddressBookManager manager]getPersonInfoArray];
         } failure:^{
-            UIAlertController *alertViewController = [UIAlertController alertControllerWithTitle:@"淘钱宝未获取通讯录权限" message:@"请在系统设置中允许“淘钱宝”访问相机\n 设置-> 隐私-> 相机 -> 淘钱宝" preferredStyle:UIAlertControllerStyleAlert];
-                                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-                                UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                                    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                                    if ([[UIApplication sharedApplication] canOpenURL:url]) {
-                                        [[UIApplication sharedApplication] openURL:url];
-                                    }
-                                }];
-                                [alertViewController addAction:cancelAction];
-                                [alertViewController addAction:confirmAction];
-                                [self presentViewController:alertViewController animated:YES completion:nil];
+            UIAlertController *alertViewController = [UIAlertController alertControllerWithTitle:@"淘钱宝未获取通讯录权限" message:@"请在系统设置中允许“淘钱宝”访问通讯录\n 设置-> 隐私-> 通讯录 -> 淘钱宝" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+            UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                if ([[UIApplication sharedApplication] canOpenURL:url]) {
+                    [[UIApplication sharedApplication] openURL:url];
+                }
+            }];
+            [alertViewController addAction:cancelAction];
+            [alertViewController addAction:confirmAction];
+            [weakSelf.webViewController presentViewController:alertViewController animated:YES completion:nil];
         }];
         
     }else if (status == kSXAddressBookAuthStatusAuthorized){
@@ -660,18 +882,19 @@
     }else{
         NSLog(@"没有权限");
     }
-
+    
 }
 
 -(void)getAddressBookInformation{
     
+    __weak typeof(self) weakSelf = self;
     
     [GMSystemAuthorizationTool checkAddressBookAuthorization:^(bool isAuthorized, ABAuthorizationStatus authorStatus) {
-       
+        
         if (isAuthorized) {
-
             
-            [[SXAddressBookManager manager]presentPageOnTarget:self chooseAction:^(SXPersonInfoEntity *person) {
+            
+            [[SXAddressBookManager manager]presentPageOnTarget:self.webViewController chooseAction:^(SXPersonInfoEntity *person) {
                 
                 
                 if (person.phoneNumber.length) {
@@ -681,8 +904,8 @@
                 NSArray * phones = [person.phoneNumber componentsSeparatedByString:@"."];
                 NSArray * arrary = [NSArray arrayWithObjects:@{@"username":person.fullname,@"phones":phones}, nil];
                 
-                _addressBookCallBack([self DataTOjsonString:arrary]);
-
+                _addressBookCallBack([weakSelf DataTOjsonString:arrary]);
+                
             }];
         } else {
             
@@ -692,7 +915,7 @@
                 if (granted) { // 授权成功
                     
                 } else {  // 授权失败
-                    UIAlertController *alertViewController = [UIAlertController alertControllerWithTitle:@"淘钱宝未获取通讯录权限" message:@"请在系统设置中允许“淘钱宝”访问相机\n 设置-> 隐私-> 相机 -> 淘钱宝" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertController *alertViewController = [UIAlertController alertControllerWithTitle:@"淘钱宝未获取通讯录权限" message:@"请在系统设置中允许“淘钱宝”访问通讯录\n 设置-> 隐私-> 通讯录 -> 淘钱宝" preferredStyle:UIAlertControllerStyleAlert];
                     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
                     UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                         NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
@@ -702,12 +925,12 @@
                     }];
                     [alertViewController addAction:cancelAction];
                     [alertViewController addAction:confirmAction];
-                    [self presentViewController:alertViewController animated:YES completion:nil];
+                    [weakSelf.webViewController presentViewController:alertViewController animated:YES completion:nil];
                 }
             });
             
         }
-
+        
     }];
 }
 
@@ -715,22 +938,23 @@
 #pragma mark - events handle
 -(void)photographAction
 {
-
+    __weak typeof(self) weakSelf = self;
+    
     //打开相册
     [GMSystemAuthorizationTool checkPhotographAlbumAuthorization:^(bool isAuthorized) {
         if (isAuthorized) {
             if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     UIImagePickerController *pickerViewController = [[UIImagePickerController alloc] init];
-                    pickerViewController.delegate = self;
+                    pickerViewController.delegate = weakSelf;
                     pickerViewController.allowsEditing = NO;
                     pickerViewController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                    self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-                    [self presentViewController:pickerViewController animated:YES completion:nil];
+                    weakSelf.webViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+                    [weakSelf.webViewController presentViewController:pickerViewController animated:YES completion:nil];
                 });
             }else{
                 NSDictionary * dict = @{@"code":@"-1",@"msg":@"设备不支持相册"};
-                self.responseCallback([self DictTOjsonString:dict]);
+                weakSelf.responseCallback([weakSelf DictTOjsonString:dict]);
                 
             }
         } else {
@@ -744,7 +968,7 @@
             }];
             [alertViewController addAction:cancelAction];
             [alertViewController addAction:confirmAction];
-            [self presentViewController:alertViewController animated:YES completion:nil];
+            [weakSelf.webViewController presentViewController:alertViewController animated:YES completion:nil];
         }
     }];
     
@@ -753,28 +977,31 @@
 
 -(void)cameraAction
 {
+    __weak typeof(self) weakSelf = self;
+    
     //打开相机
     [GMSystemAuthorizationTool checkCameraAuthorization:^(bool isAuthorized, AVAuthorizationStatus authorStatus) {
         if (isAuthorized) {
             if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     UIImagePickerController *pickerViewController = [[UIImagePickerController alloc] init];
-                    pickerViewController.delegate = self;
+                    pickerViewController.delegate = weakSelf;
                     pickerViewController.allowsEditing = NO;
                     pickerViewController.sourceType = UIImagePickerControllerSourceTypeCamera;
-                    self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-                    [self presentViewController:pickerViewController animated:YES completion:nil];
+                    weakSelf.webViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+                    [weakSelf.webViewController presentViewController:pickerViewController animated:YES completion:nil];
                 });
                 
             }else{
                 NSDictionary * dict = @{@"code":@"-1",@"msg":@"设备不支持相机"};
-                self.imageResponseCallback([self DictTOjsonString:dict]);
+                
+                self.imageResponseCallback([weakSelf DictTOjsonString:dict]);
                 
             }
         } else {
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"淘钱宝获取x相机权限" message:@"请在系统设置中允许“淘钱宝”访问相机\n 设置-> 隐私-> 相册 -> 淘钱宝" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"淘钱宝获取相机权限" message:@"请在系统设置中允许“淘钱宝”访问相机\n 设置-> 隐私-> 相机 -> 淘钱宝" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *concelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                [self.navigationController popViewControllerAnimated:YES];
+                //                [self.webViewController.navigationController popViewControllerAnimated:YES];
             }];
             [alertController addAction:concelAction];
             UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -784,22 +1011,24 @@
                 }
             }];
             [alertController addAction:confirmAction];
-            [self presentViewController:alertController animated:YES completion:nil];
+            [weakSelf.webViewController presentViewController:alertController animated:YES completion:nil];
         }
     }];
-
     
-   
+    
+    
 }
 -(void)locationAction
 {
+    __weak typeof(self) weakSelf = self;
+    
     NSLog(@"locationAction");
     //打开相册
     [GMSystemAuthorizationTool checkLocationAuthorization:^(bool isAuthorized, CLAuthorizationStatus status) {
         if (isAuthorized) {
             [[LocationTools sharedInstance] getCurrentLocation:^(CLLocation *location, CLPlacemark *pl, NSString *error, BOOL loading) {
                 if (pl.locality.length > 0) {
-            
+                    
                     
                     NSString * latitude = [NSString stringWithFormat:@"%lf",location.coordinate.latitude];
                     
@@ -809,20 +1038,20 @@
                     NSString *shi  = pl.locality;
                     NSString *qu  = pl.subLocality;
                     NSString *street  = pl.name;
-
+                    
                     NSString *address = [NSString stringWithFormat:@"%@ %@ %@ %@",sheng,shi,qu,street];
                     
                     NSDictionary *info = @{@"latitude":latitude,@"longitude":longitude,@"address":address,
                                            @"addressDetail":@{@"province":sheng,@"city":shi,@"region":qu,@"street":street}};
                     
-                    self.locationResponseCallback([self DataTOjsonString:info]);
+                    weakSelf.locationResponseCallback([weakSelf DataTOjsonString:info]);
                     
                 }
             }];
         } else {
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"淘钱宝获取位置权限" message:@"请在系统设置中允许“淘钱宝”访问位置\n 设置-> 隐私-> 位置 -> 淘钱宝" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *concelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                [self.navigationController popViewControllerAnimated:YES];
+                //                [self.webViewController.navigationController popViewControllerAnimated:YES];
             }];
             [alertController addAction:concelAction];
             UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -832,11 +1061,11 @@
                 }
             }];
             [alertController addAction:confirmAction];
-            [self presentViewController:alertController animated:YES completion:nil];
+            [weakSelf.webViewController presentViewController:alertController animated:YES completion:nil];
         }
     }];
-
-  
+    
+    
 }
 
 
@@ -871,12 +1100,12 @@
 -(void)handlePicture:(UIImage *)image
 {
     image = [image fixOrientation:image];
-//    image = [image rotate:UIImageOrientationLeft];
-//    image = [image imageRotatedByDegrees:0.0f];
-    NSLog(@"image.size1 = %@",[NSValue valueWithCGSize:image.size]);
+    //    image = [image rotate:UIImageOrientationLeft];
+    //    image = [image imageRotatedByDegrees:0.0f];
+    //    NSLog(@"image.size1 = %@",[NSValue valueWithCGSize:image.size]);
     NSData *data = UIImageJPEGRepresentation(image, 0.1f);
     NSString *base64String = [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-    NSLog(@"base64String = %@",base64String);
+    //    NSLog(@"base64String = %@",base64String);
     
     self.imageResponseCallback([self DataTOjsonString:base64String]);
 }
@@ -895,34 +1124,8 @@
 }
 
 #pragma mark - WKNavigationDelegate
-//
-//- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-//{
-//    return YES;
-//}
-//- (void)webViewDidStartLoad:(UIWebView *)webView
-//{
-//    NSLog(@"webViewDidStartLoad");
-//    self.progressView.hidden = NO;
-//    self.progressView.transform = CGAffineTransformMakeScale(1.0f, 1.5f);
-//    [self.view bringSubviewToFront:self.progressView];
-//}
-//- (void)webViewDidFinishLoad:(UIWebView *)webView
-//{
-//    NSLog(@"webViewDidFinishLoad");
-//
-//}
-//- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
-//{
-//    NSLog(@"webViewDidFail");
-//    self.progressView.hidden = YES;
-//    
-//}
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+
 
 #pragma mark - KVO
 
@@ -946,12 +1149,7 @@
     }
 }
 #pragma mark - loginout delegate
--(void)didLogout:(id)data
-{
-    NSDictionary * dict = @{@"code":@"0",@"msg":@"sucess",@"data":data?:@""};
-    self.responseCallback([self DictTOjsonString:dict]);
-    
-}
+
 -(void)didLogin:(id)data
 {
     NSDictionary * dict = @{@"code":@"0",@"msg":@"sucess",@"data":data?:@""};
@@ -968,14 +1166,15 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSLog(@"%ld,",(long)buttonIndex);
-
+    
     if (buttonIndex == 1) {
         [self cameraAction];
-
-    }else if (buttonIndex  == 2){
         
+        
+    }else if (buttonIndex  == 2){
         [self photographAction];
-
+        
+        
     }
     
 }
@@ -1003,11 +1202,12 @@
     
     _addressBookCallBack([NSString stringWithFormat:@"%@, %@",telValue,anFullName]);
     
-    [self dismissViewControllerAnimated:YES completion:^{
-      
+    [self.webViewController dismissViewControllerAnimated:YES completion:^{
+        
     }];
 }
 
+///组装数据
 -(NSString*)DataTOjsonString:(NSObject * )object
 {
     NSDictionary * dict = @{@"code":@"0",@"msg":@"sucess",@"data":object};
@@ -1017,7 +1217,7 @@
 //json 字符串
 -(NSString*)DictTOjsonString:(NSObject * )dict
 {
-
+    
     
     NSString *jsonString = nil;
     NSError *error;
@@ -1030,31 +1230,26 @@
         jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     }
     
-
     
-//    NSData * getJsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-
-//    NSDictionary * getDict = [NSJSONSerialization JSONObjectWithData:getJsonData options:NSJSONReadingMutableContainers error:&error];
-
-//    NSString * string = [getDict objectForKey:@"data"];
-//    
-//    //Base64字符串转UIImage图片：
-//    NSData *decodedImgData = [[NSData alloc] initWithBase64EncodedString:string options:NSDataBase64DecodingIgnoreUnknownCharacters];
-//    UIImage *decodedImage = [UIImage imageWithData:decodedImgData];
-//    
-//
-//    UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 100, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width)];
-//    imgV.contentMode = UIViewContentModeScaleAspectFit;
-//    [imgV setImage:decodedImage];
-//    [self.view addSubview:imgV];
-
+    
+    //    NSData * getJsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    //    NSDictionary * getDict = [NSJSONSerialization JSONObjectWithData:getJsonData options:NSJSONReadingMutableContainers error:&error];
+    
+    //    NSString * string = [getDict objectForKey:@"data"];
+    //
+    //    //Base64字符串转UIImage图片：
+    //    NSData *decodedImgData = [[NSData alloc] initWithBase64EncodedString:string options:NSDataBase64DecodingIgnoreUnknownCharacters];
+    //    UIImage *decodedImage = [UIImage imageWithData:decodedImgData];
+    //
+    //
+    //    UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 100, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width)];
+    //    imgV.contentMode = UIViewContentModeScaleAspectFit;
+    //    [imgV setImage:decodedImage];
+    //    [self.view addSubview:imgV];
+    
     
     return jsonString;
-}
-
--(void)dealloc
-{
-//    [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
 }
 
 
